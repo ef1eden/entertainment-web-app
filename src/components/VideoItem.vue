@@ -9,7 +9,7 @@
                 <inline-svg :src="require('@/assets/images/svg/icon-play.svg')"/>
                 <span>Play</span>
             </div>
-            <img class="item-photo" :src="require(`../assets/images/thumbnails/${video.thumbnail.regular.large}`)" alt="">
+            <img class="item-photo" v-bind:src="imageSize" alt="">
         </div>
         <div class="item-content">
             <div class="info">
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { onBeforeMount, onBeforeUnmount, ref } from '@vue/runtime-core';
 import InlineSvg from 'vue-inline-svg';
 
 export default {
@@ -39,6 +40,41 @@ export default {
     components: {
         InlineSvg
     },
+    setup(props) {
+        const width = ref(null);
+        const imageSize = ref(null)
+        const breakpoints = {
+            mobile: 768,
+            tablet: 991,
+            desktop: 1200
+        }
+
+        function setImageSize() {
+            width.value = window.innerWidth;
+            if(width.value > breakpoints.desktop) {
+                imageSize.value = require(`../assets/images/thumbnails/${props.video.thumbnail.regular.large}`);
+            }
+            else if(width.value > breakpoints.tablet) {
+                imageSize.value = require(`../assets/images/thumbnails/${props.video.thumbnail.regular.medium}`);
+            }
+            else {
+                imageSize.value = require(`../assets/images/thumbnails/${props.video.thumbnail.regular.small}`);
+            }
+        }
+
+        onBeforeMount(() => {
+            setImageSize()
+            window.addEventListener("resize", setImageSize);
+        });
+
+        onBeforeUnmount(() => {
+            window.removeEventListener("resize", setImageSize);
+        });
+
+        return {
+            imageSize
+        }
+    }
 }
 </script>
 
@@ -198,6 +234,13 @@ export default {
                 transition: all .3s ease;
                 transform: translateY(15px);
 
+                @media(max-width: 600px) {
+                    width: 100px;
+                    height: 42px;
+                    margin-left: -50px;
+                    margin-top: -21px;
+                }
+
                 span {
                     font-size: 18px;
                     line-height: 23px;
@@ -205,12 +248,21 @@ export default {
                     position: relative;
                     top: -1px;
                     transition: all .3s ease;
+
+                    @media(max-width: 600px) {
+                        font-size: 15px;
+                        line-height: 19px;
+                    }
                 }
 
                 :deep(svg) {
                     width: 30px;
                     height: 30px;
                     margin-right: 19px;
+
+                    @media(max-width: 600px) {
+                        margin-right: 10px;
+                    }
 
                     path {
                         transition: all .3s ease;
@@ -244,6 +296,11 @@ export default {
                 justify-content: center;
                 border-radius: 50px;
                 transition: all .3s ease;
+
+                @media(max-width: 600px) {
+                    top: 9px;
+                    right: 9px;
+                }
 
                 :deep(svg) {
                     path {

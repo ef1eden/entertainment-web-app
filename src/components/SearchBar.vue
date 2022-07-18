@@ -1,26 +1,35 @@
 <template>
   <div class="search-container">
     <img class="search-icon" src="@/assets/images/svg/icon-search.svg"/>
-    <input type="search" class="search" placeholder="Search for movies or TV series" v-model="searchValue" @input="valueChange()">
+    <input type="search" class="search" :placeholder="`${title}`" v-model="searchValue" @input="valueChange()">
   </div>
 </template>
 
 <script>
 import { ref } from '@vue/reactivity'
+import { useStore } from 'vuex';
+import debounce from 'lodash.debounce';
 
 export default {
     name: 'SearchBar',
+    props: {
+        title: {
+            type: String,
+            required: true,
+        }
+    },
     components: {
     },
     setup() {
         const searchValue = ref('');
-
-        function valueChange() {
-           console.log(searchValue.value);
-        }
-
+        const store = useStore();
     
-        return { valueChange, searchValue }
+        return { 
+            valueChange: debounce(function() {
+                store.dispatch('SEARCH_VIDEOS', searchValue.value.toLowerCase());
+            }, 500),
+            searchValue 
+        }
     }
 }
 </script>
