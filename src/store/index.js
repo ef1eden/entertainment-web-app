@@ -29,7 +29,7 @@ export default createStore({
   actions: {
     async LOAD_VIDEOS({ commit }) {
       commit('TOGGLE_LOADING');
-      let response = await API().get('/videos');
+      let response = await API().get('/v1/669a4477-cab6-40f4-be28-de19929374a0');
       commit('SET_VIDEOS', response.data);
       commit('TOGGLE_LOADING');
     },

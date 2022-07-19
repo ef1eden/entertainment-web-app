@@ -23,6 +23,10 @@ export default {
   justify-content: center;
   padding: 0 0 85px 60px;
 
+  @media(max-width: 768px) {
+      padding: 0 0 50px 0;
+  }
+
   .lds-dual-ring {
     display: inline-block;
     width: 70px;
