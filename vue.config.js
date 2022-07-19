@@ -9,10 +9,5 @@ module.exports = {
         additionalData: `@import "@/assets/scss/variables.scss";`
       }
     }
-  },
-  pwa: {
-    workboxOptions: {
-      exclude: [/_redirects/]
-    }
   }
-}
+};
