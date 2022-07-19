@@ -3,7 +3,6 @@ import HomeView from '../views/HomeView.vue'
 import MoviesView from '../views/MoviesView.vue'
 import TVSeriesView from '../views/TVSeriesView.vue'
 import BookmarkedView from '../views/BookmarkedView.vue'
-import SingleView from '../views/SingleView.vue'
 
 const routes = [
   {
@@ -26,11 +25,6 @@ const routes = [
     name: 'Bookmarked',
     component: BookmarkedView
   },
-  {
-    path: '/video:videoId',
-    name: 'SingleView',
-    component: SingleView
-  }
 ]
 
 const router = createRouter({

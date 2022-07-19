@@ -1,4 +1,8 @@
 <template>
+<transition name="nav-fade"
+    enter-active-class="animate__animated animate__tada"
+  leave-active-class="animate__animated animate__bounceOutRight"
+      >
   <nav>
     <div class="nav-container">
         <div class="nav-content">
@@ -34,6 +38,7 @@
         </div>
     </div>
   </nav>
+</transition>
 </template>
 
 <script>

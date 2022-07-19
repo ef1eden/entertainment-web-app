@@ -1,8 +1,23 @@
 <template>
   <div class="app-wrapper">
-    <Navigation />
+    <transition
+      enter-active-class="animate__animated animate__fadeIn"
+      leave-active-class="animate__animated animate__animate__fadeOut"
+    >
+      <Navigation v-if="navLoaded" />
+    </transition>
     <div class="app-view">
-      <router-view />
+        <router-view
+          v-slot="{ Component }"
+        >
+          <transition
+            mode="out-in"
+            enter-active-class="animate__animated animate__fadeIn"
+            leave-active-class="animate__animated animate__fadeOut"
+          > 
+            <component :is="Component"></component>
+          </transition>
+        </router-view>
     </div>
   </div>
 </template>
@@ -10,17 +25,21 @@
 <script>
 import Navigation from '@/components/Navigation.vue';
 import { useStore } from 'vuex';
-import { onMounted } from '@vue/runtime-core';
+import { onMounted, ref } from '@vue/runtime-core';
 
 export default {
   name: "app",
   components: { Navigation },
   setup() {
     const store = useStore();
+    const navLoaded = ref(false);
     
     onMounted(() => {
+      navLoaded.value = true;
       store.dispatch('LOAD_VIDEOS');
     })
+
+    return { navLoaded }
   }
 }
 </script>
@@ -66,6 +85,16 @@ html, body {
 ::-webkit-scrollbar-thumb {
   background: $main-color;
   border-radius: 8px;
+}
+
+.nav-fade-enter-active,
+.nav-fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.nav-fade-enter-from,
+.nav-fade-leave-to {
+  opacity: 0;
 }
 
 .app-wrapper {

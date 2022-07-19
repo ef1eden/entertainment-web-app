@@ -48,10 +48,11 @@ export default {
                 } 
             }
         };
+        const trendingVideos = computed(() => store.state.videos.filter(i => i.isTrending ));
 
         return {
             swiperOptions,
-            trendingVideos: computed(() => store.getters.filterTrending)
+            trendingVideos
         };
     },
 }

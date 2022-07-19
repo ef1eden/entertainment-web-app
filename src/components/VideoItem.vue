@@ -1,7 +1,7 @@
 <template>
     <div class="video-item">
         <div class="photo-wrapper">
-            <div class="bookmark-icon">
+            <div @click="setAsBookmarked" class="bookmark-icon">
                 <inline-svg v-if="!video.isBookmarked" :src="require('@/assets/images/svg/icon-bookmark.svg')"/>
                 <inline-svg v-if="video.isBookmarked" class="bookmarked" :src="require('@/assets/images/svg/icon-bookmark.svg')"/>
             </div>
@@ -29,6 +29,7 @@
 <script>
 import { onBeforeMount, onBeforeUnmount, ref } from '@vue/runtime-core';
 import InlineSvg from 'vue-inline-svg';
+import { useStore } from 'vuex';
 
 export default {
     props: {
@@ -41,12 +42,17 @@ export default {
         InlineSvg
     },
     setup(props) {
+        const store = useStore();
         const width = ref(null);
         const imageSize = ref(null)
         const breakpoints = {
             mobile: 768,
             tablet: 991,
             desktop: 1200
+        }
+
+        function setAsBookmarked() {
+            store.commit('TOGGLE_BOOKMARK', props.video.id);
         }
 
         function setImageSize() {
@@ -72,7 +78,7 @@ export default {
         });
 
         return {
-            imageSize
+            imageSize, setAsBookmarked
         }
     }
 }

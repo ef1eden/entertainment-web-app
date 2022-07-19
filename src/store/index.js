@@ -5,17 +5,7 @@ export default createStore({
   state: {
     videos: [],
     searchValue: null,
-  },
-  getters: {
-    filterTrending (state) {
-      return state.videos.filter(i => i.isTrending )
-    },
-    filterRecommended (state) {
-      return state.videos.filter(i => !i.isTrending )
-    },
-    filterSearch (state) {
-      return state.videos.filter(i => i.title.toLowerCase().includes(state.searchValue));
-    }
+    showLoading: false,
   },
   mutations: {
     SET_VIDEOS(state, payload) {
@@ -23,18 +13,26 @@ export default createStore({
     },
     GET_SEARCH_VALUE(state, payload) {
       state.searchValue = payload;
-      console.log(state.searchValue)
       state.videos.filter(i => i.title.toLowerCase().includes(state.searchValue));
+    },
+    REMOVE_SEARCH_VALUE(state) {
+      state.searchValue = null;
+    },
+    TOGGLE_LOADING(state) {
+      state.showLoading = !state.showLoading;
+    },
+    TOGGLE_BOOKMARK(state, payload) {
+      const item = state.videos.find(i => i.id === payload);
+      item.isBookmarked = !item.isBookmarked;
     }
   },
   actions: {
     async LOAD_VIDEOS({ commit }) {
+      commit('TOGGLE_LOADING');
       let response = await API().get('/videos');
       commit('SET_VIDEOS', response.data);
+      commit('TOGGLE_LOADING');
     },
-    SEARCH_VIDEOS({ commit }, payload) {
-      commit('GET_SEARCH_VALUE', payload);
-    }
   },
   modules: {
   }

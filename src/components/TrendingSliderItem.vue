@@ -1,6 +1,6 @@
 <template>
     <div class="trending-item">
-        <div class="bookmark-icon">
+        <div @click="setAsBookmarked" class="bookmark-icon">
             <inline-svg v-if="!video.isBookmarked" :src="require('@/assets/images/svg/icon-bookmark.svg')"/>
             <inline-svg v-if="video.isBookmarked" class="bookmarked" :src="require('@/assets/images/svg/icon-bookmark.svg')"/>
         </div>
@@ -28,6 +28,7 @@
 import { ref } from '@vue/reactivity';
 import InlineSvg from 'vue-inline-svg';
 import { onBeforeMount, onBeforeUnmount } from '@vue/runtime-core';
+import { useStore } from 'vuex';
 
 export default {
     name: 'TrendingSliderItem',
@@ -39,10 +40,15 @@ export default {
     },
     components: { InlineSvg },
     setup(props) {
+        const store = useStore();
         const width = ref(null);
         const imageSize = ref(null)
         const breakpoints = {
             mobile: 768
+        }
+
+        function setAsBookmarked() {
+            store.commit('TOGGLE_BOOKMARK', props.video.id);
         }
 
         function setImageSize() {
@@ -65,7 +71,7 @@ export default {
         });
 
         return {
-            imageSize
+            imageSize, setAsBookmarked
         }
     }
 }

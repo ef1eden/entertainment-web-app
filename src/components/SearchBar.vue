@@ -9,6 +9,7 @@
 import { ref } from '@vue/reactivity'
 import { useStore } from 'vuex';
 import debounce from 'lodash.debounce';
+import { onBeforeUnmount } from '@vue/runtime-core';
 
 export default {
     name: 'SearchBar',
@@ -23,10 +24,14 @@ export default {
     setup() {
         const searchValue = ref('');
         const store = useStore();
+
+        onBeforeUnmount(() => {
+            store.commit('REMOVE_SEARCH_VALUE');
+        })
     
         return { 
-            valueChange: debounce(function() {
-                store.dispatch('SEARCH_VIDEOS', searchValue.value.toLowerCase());
+            valueChange: debounce( function() {
+                store.commit('GET_SEARCH_VALUE', searchValue.value.toLowerCase());
             }, 500),
             searchValue 
         }
